@@ -25,6 +25,10 @@ KMEANS_N_INIT = 10                 # n_init untuk KMeans
 mp_face = mp.solutions.face_detection
 face_detector = mp_face.FaceDetection(model_selection=0, min_detection_confidence=0.6)
 
+# -----------------------
+# Haarcascade Fallback Detector
+# -----------------------
+face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
 
 # -----------------------
 # Util: buat folder debug
@@ -63,6 +67,48 @@ def detect_face_mediapipe(img):
 
     return (x, y, w, h)
 
+# -----------------------
+# Fallback: Haarcascade + padding
+# -----------------------
+def detect_face_fallback(img):
+    """
+    Coba MediaPipe dulu.
+    Jika gagal → fallback Haarcascade.
+    """
+    # 1) coba mediapipe
+    mp_box = detect_face_mediapipe(img)
+    if mp_box is not None:
+        return mp_box
+
+    # 2) Haarcascade fallback
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    faces = face_cascade.detectMultiScale(
+        gray,
+        scaleFactor=1.1,
+        minNeighbors=6,
+        minSize=(40, 40)
+    )
+
+    if len(faces) == 0:
+        return None
+
+    # ambil wajah terbesar (paling masuk akal)
+    faces = sorted(faces, key=lambda f: f[2] * f[3], reverse=True)
+    x, y, w, h = faces[0]
+
+    # tambahkan padding biar mirip mediapipe
+    ih, iw = img.shape[:2]
+    pad = int(PAD_RATIO * h)
+
+    x = max(0, x - pad)
+    y = max(0, y - pad)
+    w = min(iw - x, w + pad * 2)
+    h = min(ih - y, h + pad * 2)
+
+    if w < 1 or h < 1:
+        return None
+
+    return (x, y, w, h)
 
 # -----------------------
 # 2) GrabCut dengan fallback
@@ -185,7 +231,7 @@ def process_folder_to_csv(base_folder=BASE_FOLDER, output_csv=OUTPUT_CSV):
                     failed += 1
                     continue
 
-                face_box = detect_face_mediapipe(img)
+                face_box = detect_face_fallback(img)
                 if face_box is None:
                     print("No face.")
                     rows.append([fname, label, None, None, None, None, None, None, "no_face"])

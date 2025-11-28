@@ -26,6 +26,11 @@ mp_face = mp.solutions.face_detection
 face_detector = mp_face.FaceDetection(model_selection=0, min_detection_confidence=0.6)
 
 # ---------------------------------
+# Haarcascade fallback face detector
+# ---------------------------------
+face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+
+# ---------------------------------
 # Create debug folder
 # ---------------------------------
 if DEBUG_SAVE and not os.path.exists(DEBUG_FOLDER):
@@ -33,7 +38,7 @@ if DEBUG_SAVE and not os.path.exists(DEBUG_FOLDER):
 
 
 # ---------------------------------
-# 1. Face Detection (Mediapipe + Padding)
+# 1. Face Detection — Mediapipe
 # ---------------------------------
 def detect_face_mediapipe(img):
     img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
@@ -65,12 +70,53 @@ def detect_face_mediapipe(img):
 
 
 # ---------------------------------
+# 1B. Haarcascade fallback
+# ---------------------------------
+def detect_face_fallback(img):
+    """
+    Coba Mediapipe dulu.
+    Jika gagal → Haarcascade.
+    """
+    box = detect_face_mediapipe(img)
+    if box is not None:
+        return box
+
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    faces = face_cascade.detectMultiScale(
+        gray,
+        scaleFactor=1.1,
+        minNeighbors=6,
+        minSize=(40, 40)
+    )
+
+    if len(faces) == 0:
+        return None
+
+    # Ambil wajah terbesar
+    faces = sorted(faces, key=lambda f: f[2] * f[3], reverse=True)
+    x, y, w, h = faces[0]
+
+    # Tambah padding biar mirip mediapipe
+    ih, iw = img.shape[:2]
+    pad = int(PAD_RATIO * h)
+
+    x = max(0, x - pad)
+    y = max(0, y - pad)
+    w = min(iw - x, w + pad * 2)
+    h = min(ih - y, h + pad * 2)
+
+    if w < 1 or h < 1:
+        return None
+
+    return (x, y, w, h)
+
+
+# ---------------------------------
 # 2. GrabCut with fallback
 # ---------------------------------
 def apply_grabcut_with_fallback(img, face_box):
     x, y, w, h = face_box
 
-    # If bbox too small
     if w < MIN_BBOX_SIZE or h < MIN_BBOX_SIZE:
         fallback_mask = np.zeros(img.shape[:2], dtype=np.uint8)
         fallback_mask[y:y+h, x:x+w] = 255
@@ -86,15 +132,13 @@ def apply_grabcut_with_fallback(img, face_box):
         cv2.grabCut(img, mask, rect, bgdModel, fgdModel, GRABCUT_ITER, cv2.GC_INIT_WITH_RECT)
         mask2 = np.where((mask == cv2.GC_PR_FGD) | (mask == cv2.GC_FGD), 1, 0).astype("uint8")
 
-        img_fg = img * mask2[:, :, None]
-
         if mask2.sum() < 50:
             raise ValueError("GrabCut empty")
 
+        img_fg = img * mask2[:, :, None]
         return img_fg, mask2
 
     except:
-        # fallback: simple rectangle mask
         fallback_mask = np.zeros(img.shape[:2], np.uint8)
         fallback_mask[y:y+h, x:x+w] = 255
         img_fg = img * (fallback_mask[:, :, None] // 255)
@@ -116,7 +160,6 @@ def initial_skin_mask(face_roi):
 
     mask = cv2.bitwise_and(mask_hsv, mask_ycrcb)
 
-    # Clean mask
     kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
     mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
     mask = cv2.medianBlur(mask, 5)
@@ -133,7 +176,6 @@ def dominant_color(img, mask):
         return None
 
     pixels = pixels.reshape(-1, 3).astype(np.float32)
-
     kmeans = KMeans(n_clusters=KMEANS_K, n_init=KMEANS_N_INIT, random_state=42)
     kmeans.fit(pixels)
 
@@ -174,8 +216,8 @@ def process_folder_to_csv(base_folder, output_csv):
                     failed += 1
                     continue
 
-                # 1. detect face
-                face_box = detect_face_mediapipe(img)
+                # 1. FACE DETECTION WITH FALLBACK
+                face_box = detect_face_fallback(img)
                 if face_box is None:
                     print("No face")
                     rows.append([fname, label, None, None, None, "no_face"])
@@ -193,7 +235,6 @@ def process_folder_to_csv(base_folder, output_csv):
                 if color_mask_patch.size != 0:
                     color_mask[y:y+h, x:x+w] = color_mask_patch
 
-                # combine mask
                 grab_mask255 = (grab_mask * 255).astype(np.uint8)
                 combined_mask = cv2.bitwise_and(grab_mask255, color_mask)
 
@@ -202,7 +243,6 @@ def process_folder_to_csv(base_folder, output_csv):
 
                 # 4. dominant color
                 dom = dominant_color(img, combined_mask)
-
                 if dom is None:
                     print("No skin")
                     rows.append([fname, label, None, None, None, "no_skin"])
@@ -213,7 +253,6 @@ def process_folder_to_csv(base_folder, output_csv):
                 print(f"RGB({r},{g},{b})")
                 rows.append([fname, label, r, g, b, "ok"])
 
-                # Debug save
                 if DEBUG_SAVE:
                     save_debug_visuals(img, face_box, grab_mask, combined_mask, dom, label, fname)
 

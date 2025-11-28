@@ -25,6 +25,10 @@ KMEANS_N_INIT = 10                 # n_init untuk KMeans (kompatibel sk-learn la
 mp_face = mp.solutions.face_detection
 face_detector = mp_face.FaceDetection(model_selection=0, min_detection_confidence=0.6)
 
+# -----------------------
+# Haarcascade Fallback Detector
+# -----------------------
+face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
 
 # -----------------------
 # Util: buat folder debug
@@ -69,7 +73,44 @@ def detect_face_mediapipe(img):
 
     return (x, y, w, h)
 
+def detect_face_fallback(img):
+    """
+    Try Mediapipe first.
+    If fails → fallback to Haarcascade.
+    Returns (x, y, w, h) or None.
+    """
+    # Try MediaPipe
+    mp_box = detect_face_mediapipe(img)
+    if mp_box is not None:
+        return mp_box
 
+    # Fallback: Haarcascade
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    faces = face_cascade.detectMultiScale(
+        gray,
+        scaleFactor=1.1,
+        minNeighbors=6,
+        minSize=(40, 40)
+    )
+
+    if len(faces) == 0:
+        return None  # truly no face
+
+    # pick largest face (best assumption)
+    faces = sorted(faces, key=lambda f: f[2] * f[3], reverse=True)
+    x, y, w, h = faces[0]
+
+    # tambahkan padding biar mirip mediapipe
+    pad = int(PAD_RATIO * h)
+    ih, iw = img.shape[:2]
+
+    x = max(0, x - pad)
+    y = max(0, y - pad)
+    w = min(iw - x, w + pad * 2)
+    h = min(ih - y, h + pad * 2)
+
+    return (x, y, w, h)
+    
 # -----------------------
 # 2) GrabCut dengan proteksi & fallback
 # -----------------------
@@ -122,14 +163,41 @@ def apply_grabcut_with_fallback(img, face_box):
 # 3) CLAHE in YCrCb
 # -----------------------
 def apply_clahe_ycrcb(img):
+    """
+    Adaptive CLAHE:
+    - If brightness is high → small clipLimit (or skip CLAHE)
+    - If brightness low → stronger clipLimit
+    - Prevents color distortion.
+    """
     ycrcb = cv2.cvtColor(img, cv2.COLOR_BGR2YCrCb)
     y, cr, cb = cv2.split(ycrcb)
-    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
+
+    mean_y = np.mean(y)
+
+    # adaptive clipLimit logic
+    if mean_y < 60:
+        clip = 3.0      # very dark → stronger enhancement
+    elif mean_y < 100:
+        clip = 2.5      # dark
+    elif mean_y < 150:
+        clip = 1.8      # medium
+    elif mean_y < 190:
+        clip = 1.2      # bright
+    else:
+        clip = 1.0      # very bright → almost no enhancement
+
+    # OPTIONAL: skip CLAHE for very bright images to avoid overexposure
+    if mean_y > 200:
+        # No CLAHE → return original
+        return img, ycrcb  # keep original YCrCb for consistency
+
+    clahe = cv2.createCLAHE(clipLimit=clip, tileGridSize=(8, 8))
     y_clahe = clahe.apply(y)
+
     merged = cv2.merge([y_clahe, cr, cb])
     img_clahe = cv2.cvtColor(merged, cv2.COLOR_YCrCb2BGR)
-    return img_clahe, merged
 
+    return img_clahe, merged
 
 # -----------------------
 # 4) Initial skin mask (used for fallback and final mask generation)
@@ -204,7 +272,7 @@ def process_folder_to_csv(base_folder=BASE_FOLDER, output_csv=OUTPUT_CSV):
                     failed += 1
                     continue
 
-                face_box = detect_face_mediapipe(img)
+                face_box = detect_face_fallback(img)
                 if face_box is None:
                     print("No face.")
                     rows.append([fname, label, None, None, None, "no_face"])

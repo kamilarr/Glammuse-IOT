@@ -51,7 +51,7 @@ def compute_deltaE(row):
     return float(delta)
 
 
-merged["DeltaE"] = merged.apply(compute_deltaE, axis=1)
+merged["DeltaE"] = merged.apply(compute_deltaE, axis=1).round(2)
 
 # =====================================================
 # 5. SIMPAN HASIL

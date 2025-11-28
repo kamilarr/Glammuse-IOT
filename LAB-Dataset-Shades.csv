@@ -1,0 +1,186 @@
+brand,brand_short,product,product_short,hex,H,S,V,L,group,R,G,B,L_lab,a_lab,b_lab
+Maybelline,mb,Fit Me,fmf,f3cfb3,26,0.26,0.95,86,2,243,207,179,85,8,19
+Maybelline,mb,Fit Me,fmf,ffe3c2,32,0.24,1.0,92,2,255,227,194,92,5,20
+Maybelline,mb,Fit Me,fmf,ffe0cd,23,0.2,1.0,91,2,255,224,205,91,8,13
+Maybelline,mb,Fit Me,fmf,ffd3be,19,0.25,1.0,88,2,255,211,190,88,12,16
+Maybelline,mb,Fit Me,fmf,bd9584,18,0.3,0.74,65,2,189,149,132,65,12,15
+Maybelline,mb,Fit Me,fmf,eabda6,20,0.29,0.92,80,2,234,189,166,80,13,18
+Maybelline,mb,Fit Me,fmf,fbd2ad,28,0.31,0.98,87,2,251,210,173,87,9,24
+Maybelline,mb,Fit Me,fmf,e2b597,24,0.33,0.89,77,2,226,181,151,77,12,21
+Maybelline,mb,Fit Me,fmf,e4b38e,26,0.38,0.89,77,2,228,179,142,76,13,26
+Maybelline,mb,Fit Me,fmf,b2856f,20,0.38,0.7,60,2,178,133,111,59,14,19
+Maybelline,mb,Fit Me,fmf,e8ba8c,30,0.4,0.91,79,2,232,186,140,78,11,30
+Maybelline,mb,Fit Me,fmf,f3b584,26,0.46,0.95,79,2,243,181,132,78,17,34
+Maybelline,mb,Fit Me,fmf,f0b996,23,0.37,0.94,80,2,240,185,150,79,15,25
+Maybelline,mb,Fit Me,fmf,e3b082,28,0.43,0.89,76,2,227,176,130,76,13,31
+Maybelline,mb,Fit Me,fmf,eab181,27,0.45,0.92,77,2,234,177,129,76,15,33
+Maybelline,mb,Fit Me,fmf,9d7359,23,0.43,0.62,52,2,157,115,89,52,13,21
+Maybelline,mb,Fit Me,fmf,e2aa7b,27,0.46,0.89,74,2,226,170,123,74,15,32
+Maybelline,mb,Fit Me,fmf,d99358,27,0.59,0.85,67,2,217,147,88,67,20,42
+Maybelline,mb,Fit Me,fmf,9c744f,29,0.49,0.61,52,2,156,116,79,52,11,26
+Maybelline,mb,Fit Me,fmf,b18b65,30,0.43,0.69,61,2,177,139,101,61,9,26
+Maybelline,mb,Fit Me,fmf,84583f,22,0.52,0.52,42,2,132,88,63,42,15,22
+Maybelline,mb,Fit Me,fmf,7d5631,29,0.61,0.49,40,2,125,86,49,40,12,28
+Maybelline,mb,Fit Me,fmf,c07746,24,0.64,0.75,57,2,192,119,70,57,24,39
+Maybelline,mb,Fit Me,fmf,643c27,21,0.61,0.39,30,2,100,60,39,30,15,21
+Maybelline,mb,Fit Me,fmf,edcfb9,25,0.22,0.93,85,2,237,207,185,85,7,15
+Maybelline,mb,Fit Me,fmf,e1bba7,21,0.26,0.88,79,2,225,187,167,79,11,15
+Maybelline,mb,Fit Me,fmf,c1a07e,30,0.35,0.76,68,2,193,160,126,68,7,22
+Maybelline,mb,Fit Me,fmf,d09e7c,24,0.4,0.82,69,2,208,158,124,69,14,25
+Maybelline,mb,Fit Me,fmf,c7967d,20,0.37,0.78,66,2,199,150,125,66,15,20
+Maybelline,mb,Fit Me,fmf,c09578,24,0.38,0.75,65,2,192,149,120,65,12,22
+Maybelline,mb,Fit Me,fmf,9d6f48,28,0.54,0.62,51,2,157,111,72,51,13,29
+Maybelline,mb,Fit Me,fmf,a86d40,26,0.62,0.66,52,2,168,109,64,51,19,34
+Maybelline,mb,Fit Me,fmf,7f5c3b,29,0.54,0.5,42,2,127,92,59,42,10,25
+Maybelline,mb,Fit Me,fmf,735642,24,0.43,0.45,39,2,115,86,66,39,9,16
+Maybelline,mb,Fit Me,fmf,6b5041,21,0.39,0.42,37,2,107,80,65,36,9,13
+Maybelline,mb,Fit Me,fmf,7d5c4d,19,0.38,0.49,42,2,125,92,77,42,11,14
+Maybelline,mb,Fit Me,fmf,5c4433,25,0.45,0.36,31,2,92,68,51,31,8,14
+Maybelline,mb,Fit Me,fmf,5e3a23,23,0.63,0.37,28,2,94,58,35,28,14,21
+Maybelline,mb,Fit Me,fmf,5e4638,22,0.4,0.37,32,2,94,70,56,32,8,13
+Maybelline,mb,Fit Me,fmf,3f2018,12,0.62,0.25,16,2,63,32,24,16,13,11
+L'Oréal,lo,Infalliable,ipm,f3c6a2,27,0.33,0.95,83,2,243,198,162,83,11,24
+L'Oréal,lo,Infalliable,ipm,e5ad8b,23,0.39,0.9,75,2,229,173,139,75,16,25
+L'Oréal,lo,Infalliable,ipm,e7ad82,26,0.44,0.91,76,2,231,173,130,75,16,30
+L'Oréal,lo,Infalliable,ipm,eeb67e,30,0.47,0.93,78,2,238,182,126,78,13,36
+L'Oréal,lo,Infalliable,ipm,e8b481,30,0.44,0.91,77,2,232,180,129,77,12,33
+L'Oréal,lo,Infalliable,ipm,daa271,28,0.48,0.85,71,2,218,162,113,71,15,33
+L'Oréal,lo,Infalliable,ipm,d49e6c,29,0.49,0.83,70,2,212,158,108,69,14,34
+L'Oréal,lo,Infalliable,ipm,c0844e,28,0.59,0.75,61,2,192,132,78,60,17,38
+L'Oréal,lo,Infalliable,ipm,c27f48,27,0.63,0.76,60,2,194,127,72,59,21,40
+L'Oréal,lo,Infalliable,ipm,da9e6b,28,0.51,0.85,70,2,218,158,107,70,16,35
+L'Oréal,lo,Infalliable,ipm,b87740,28,0.65,0.72,56,2,184,119,64,56,20,40
+L'Oréal,lo,Infalliable,ipm,925422,27,0.77,0.57,43,2,146,84,34,42,22,39
+L'Oréal,lo,Infalliable,ipm,fadcc8,24,0.2,0.98,90,2,250,220,200,90,7,14
+L'Oréal,lo,Infalliable,ipm,fcd6c7,17,0.21,0.99,89,2,252,214,199,89,11,12
+L'Oréal,lo,Infalliable,ipm,f7cab1,21,0.28,0.97,85,2,247,202,177,85,12,18
+L'Oréal,lo,Infalliable,ipm,deb09e,17,0.29,0.87,76,2,222,176,158,76,14,16
+L'Oréal,lo,Infalliable,ipm,d1a396,13,0.28,0.82,71,2,209,163,150,71,15,13
+L'Oréal,lo,Infalliable,ipm,cf9c7d,23,0.4,0.81,69,2,207,156,125,69,15,24
+L'Oréal,lo,Infalliable,ipm,d99959,30,0.59,0.85,69,2,217,153,89,68,17,43
+L'Oréal,lo,Infalliable,ipm,754728,24,0.66,0.46,35,2,117,71,40,35,16,27
+L'Oréal,lo,Infalliable,ipm,4d2c0a,30,0.87,0.3,22,2,77,44,10,22,12,26
+L'Oréal,lo,Infalliable,ipm,4d2006,22,0.92,0.3,19,2,77,32,6,18,20,25
+MAC,ma,Studio Fix,sff,d8b593,30,0.32,0.85,76,4,216,181,147,76,8,22
+MAC,ma,Studio Fix,sff,fbbe91,25,0.42,0.98,82,4,251,190,145,82,16,31
+MAC,ma,Studio Fix,sff,d2ae88,31,0.35,0.82,74,4,210,174,136,73,8,24
+MAC,ma,Studio Fix,sff,d0a87f,30,0.39,0.82,72,4,208,168,127,72,9,27
+MAC,ma,Studio Fix,sff,d79051,28,0.62,0.84,66,4,215,144,81,66,21,44
+MAC,ma,Studio Fix,sff,ffdbc2,25,0.24,1.0,90,4,255,219,194,90,9,17
+MAC,ma,Studio Fix,sff,ffc9a9,22,0.34,1.0,85,4,255,201,169,85,15,23
+MAC,ma,Studio Fix,sff,ffd7b4,28,0.29,1.0,89,4,255,215,180,89,9,22
+MAC,ma,Studio Fix,sff,dfc7a8,34,0.25,0.87,82,4,223,199,168,82,4,19
+MAC,ma,Studio Fix,sff,dabc96,34,0.31,0.85,78,4,218,188,150,78,5,23
+MAC,ma,Studio Fix,sff,d9b88f,33,0.34,0.85,77,4,217,184,143,77,6,25
+MAC,ma,Studio Fix,sff,d4b588,36,0.36,0.83,76,4,212,181,136,75,5,27
+MAC,ma,Studio Fix,sff,d0ae84,33,0.37,0.82,73,4,208,174,132,73,6,26
+MAC,ma,Studio Fix,sff,d3b18a,32,0.35,0.83,75,4,211,177,138,75,7,25
+MAC,ma,Studio Fix,sff,d1ac7f,33,0.39,0.82,73,4,209,172,127,73,7,28
+MAC,ma,Studio Fix,sff,d0a97b,32,0.41,0.82,72,4,208,169,123,72,8,29
+MAC,ma,Studio Fix,sff,c9a177,31,0.41,0.79,69,4,201,161,119,69,9,28
+MAC,ma,Studio Fix,sff,c5986d,29,0.45,0.77,66,4,197,152,109,66,11,29
+MAC,ma,Studio Fix,sff,d5844b,25,0.65,0.84,63,4,213,132,75,63,26,43
+MAC,ma,Studio Fix,sff,db864d,24,0.65,0.86,64,4,219,134,77,64,27,44
+MAC,ma,Studio Fix,sff,b5855a,28,0.5,0.71,60,4,181,133,90,59,13,30
+MAC,ma,Studio Fix,sff,b38456,30,0.52,0.7,59,4,179,132,86,59,12,32
+MAC,ma,Studio Fix,sff,e5d1be,29,0.17,0.9,85,4,229,209,190,85,4,12
+MAC,ma,Studio Fix,sff,e0c8ae,31,0.22,0.88,82,4,224,200,174,82,4,16
+MAC,ma,Studio Fix,sff,e0c1a2,30,0.28,0.88,80,4,224,193,162,80,6,20
+MAC,ma,Studio Fix,sff,dcbca2,27,0.26,0.86,79,4,220,188,162,78,8,17
+MAC,ma,Studio Fix,sff,dbbc9f,29,0.27,0.86,78,4,219,188,159,78,7,19
+MAC,ma,Studio Fix,sff,d9b28d,29,0.35,0.85,75,4,217,178,141,75,9,24
+MAC,ma,Studio Fix,sff,d5b293,28,0.31,0.84,75,4,213,178,147,75,8,21
+MAC,ma,Studio Fix,sff,d5ad89,28,0.36,0.84,74,4,213,173,137,73,10,24
+MAC,ma,Studio Fix,sff,d1a88a,25,0.34,0.82,72,4,209,168,138,72,11,21
+MAC,ma,Studio Fix,sff,cfa67d,30,0.4,0.81,71,4,207,166,125,71,10,27
+MAC,ma,Studio Fix,sff,cba275,31,0.42,0.8,70,4,203,162,117,69,9,29
+MAC,ma,Studio Fix,sff,c39368,28,0.47,0.76,65,4,195,147,104,65,13,30
+MAC,ma,Studio Fix,sff,b28050,29,0.55,0.7,58,4,178,128,80,58,14,34
+MAC,ma,Studio Fix,sff,b9855a,27,0.51,0.73,60,4,185,133,90,60,15,31
+MAC,ma,Studio Fix,sff,b27949,27,0.59,0.7,56,4,178,121,73,56,17,35
+MAC,ma,Studio Fix,sff,ae7a50,27,0.54,0.68,56,4,174,122,80,56,16,31
+MAC,ma,Studio Fix,sff,a77246,27,0.58,0.65,53,4,167,114,70,53,16,32
+MAC,ma,Studio Fix,sff,a0714d,26,0.52,0.63,52,4,160,113,77,52,14,27
+MAC,ma,Studio Fix,sff,a9734e,24,0.54,0.66,54,4,169,115,78,53,17,29
+MAC,ma,Studio Fix,sff,724a32,23,0.56,0.45,36,4,114,74,50,35,14,21
+Make Up For Ever,mu,Ultra HD,uhd,f9e3d5,23,0.14,0.98,92,1,249,227,213,92,5,10
+Make Up For Ever,mu,Ultra HD,uhd,f6d2bb,23,0.24,0.96,87,1,246,210,187,87,9,16
+Make Up For Ever,mu,Ultra HD,uhd,f9d5c3,20,0.22,0.98,88,1,249,213,195,88,10,14
+Make Up For Ever,mu,Ultra HD,uhd,f7c3b3,14,0.28,0.97,83,1,247,195,179,83,16,15
+Make Up For Ever,mu,Ultra HD,uhd,deccaf,37,0.21,0.87,83,1,222,204,175,83,2,17
+Make Up For Ever,mu,Ultra HD,uhd,e1c2a8,27,0.25,0.88,81,1,225,194,168,80,7,17
+Make Up For Ever,mu,Ultra HD,uhd,efd2b8,28,0.23,0.94,86,1,239,210,184,86,6,17
+Make Up For Ever,mu,Ultra HD,uhd,f7bcb7,5,0.26,0.97,82,1,247,188,183,82,20,11
+Make Up For Ever,mu,Ultra HD,uhd,ebcab0,26,0.25,0.92,84,1,235,202,176,84,8,17
+Make Up For Ever,mu,Ultra HD,uhd,eac1ac,20,0.26,0.92,81,1,234,193,172,81,11,16
+Make Up For Ever,mu,Ultra HD,uhd,e8c6a3,30,0.3,0.91,82,1,232,198,163,82,7,22
+Make Up For Ever,mu,Ultra HD,uhd,f2ccb7,21,0.24,0.95,85,1,242,204,183,85,10,15
+Make Up For Ever,mu,Ultra HD,uhd,dca795,15,0.32,0.86,73,1,220,167,149,73,17,17
+Make Up For Ever,mu,Ultra HD,uhd,e4bd9c,27,0.32,0.89,79,1,228,189,156,79,9,22
+Make Up For Ever,mu,Ultra HD,uhd,daad90,24,0.34,0.85,74,1,218,173,144,74,12,21
+Make Up For Ever,mu,Ultra HD,uhd,d8ab8b,25,0.36,0.85,74,1,216,171,139,73,12,23
+Make Up For Ever,mu,Ultra HD,uhd,ddb395,25,0.33,0.87,76,1,221,179,149,76,11,21
+Make Up For Ever,mu,Ultra HD,uhd,e3b391,25,0.36,0.89,77,1,227,179,145,76,13,24
+Make Up For Ever,mu,Ultra HD,uhd,e3b296,22,0.34,0.89,77,1,227,178,150,76,14,21
+Make Up For Ever,mu,Ultra HD,uhd,dcb59c,23,0.29,0.86,77,1,220,181,156,76,10,18
+Make Up For Ever,mu,Ultra HD,uhd,d79e89,16,0.36,0.84,70,1,215,158,137,70,18,19
+Make Up For Ever,mu,Ultra HD,uhd,d9a586,22,0.38,0.85,72,1,217,165,134,72,15,24
+Make Up For Ever,mu,Ultra HD,uhd,d19578,20,0.43,0.82,67,1,209,149,120,67,19,24
+Make Up For Ever,mu,Ultra HD,uhd,e7b391,24,0.37,0.91,77,1,231,179,145,77,14,25
+Make Up For Ever,mu,Ultra HD,uhd,d4a689,23,0.35,0.83,72,1,212,166,137,72,13,22
+Make Up For Ever,mu,Ultra HD,uhd,d69b81,18,0.4,0.84,69,1,214,155,129,69,19,22
+Make Up For Ever,mu,Ultra HD,uhd,d59682,14,0.39,0.84,68,1,213,150,130,68,21,20
+Make Up For Ever,mu,Ultra HD,uhd,c99980,21,0.36,0.79,67,1,201,153,128,67,15,20
+Make Up For Ever,mu,Ultra HD,uhd,c98567,18,0.49,0.79,62,1,201,133,103,62,23,27
+Make Up For Ever,mu,Ultra HD,uhd,c7977b,22,0.38,0.78,67,1,199,151,123,66,14,22
+Make Up For Ever,mu,Ultra HD,uhd,be8470,15,0.41,0.75,61,1,190,132,112,60,20,20
+Make Up For Ever,mu,Ultra HD,uhd,c78569,18,0.47,0.78,62,1,199,133,105,62,22,25
+Make Up For Ever,mu,Ultra HD,uhd,b68069,18,0.42,0.71,59,1,182,128,105,58,18,21
+Make Up For Ever,mu,Ultra HD,uhd,b17862,17,0.45,0.69,56,1,177,120,98,56,20,21
+Make Up For Ever,mu,Ultra HD,uhd,996754,17,0.45,0.6,49,1,153,103,84,49,18,19
+Make Up For Ever,mu,Ultra HD,uhd,9c624a,18,0.53,0.61,48,1,156,98,74,47,21,23
+Make Up For Ever,mu,Ultra HD,uhd,8e5642,16,0.54,0.56,43,1,142,86,66,42,21,21
+Make Up For Ever,mu,Ultra HD,uhd,784a42,9,0.45,0.47,37,1,120,74,66,36,18,13
+Make Up For Ever,mu,Ultra HD,uhd,895852,7,0.4,0.54,43,1,137,88,82,43,20,12
+Make Up For Ever,mu,Ultra HD,uhd,644136,14,0.46,0.39,31,1,100,65,54,31,14,13
+NARS,na,Velvet Matte,vm,fad8a7,35,0.33,0.98,88,6,250,216,167,88,5,29
+NARS,na,Velvet Matte,vm,efbf99,27,0.36,0.94,81,6,239,191,153,81,12,26
+NARS,na,Velvet Matte,vm,f6d0a1,33,0.35,0.96,86,6,246,208,161,86,7,28
+NARS,na,Velvet Matte,vm,ecb98c,28,0.41,0.93,79,6,236,185,140,79,13,30
+NARS,na,Velvet Matte,vm,e7ab74,29,0.5,0.91,75,6,231,171,116,75,16,37
+NARS,na,Velvet Matte,vm,e6b685,30,0.42,0.9,78,6,230,182,133,77,11,32
+NARS,na,Velvet Matte,vm,dd9e6d,26,0.51,0.87,71,6,221,158,109,70,18,35
+NARS,na,Velvet Matte,vm,e4aa7c,27,0.46,0.89,74,6,228,170,124,74,16,32
+NARS,na,Velvet Matte,vm,dfa575,27,0.48,0.87,73,6,223,165,117,72,16,33
+NARS,na,Velvet Matte,vm,da9b5a,30,0.59,0.85,69,6,218,155,90,69,17,43
+NARS,na,Velvet Matte,vm,e4a36a,28,0.54,0.89,72,6,228,163,106,72,18,39
+NARS,na,Velvet Matte,vm,ca8a55,27,0.58,0.79,63,6,202,138,85,63,19,38
+NARS,na,Velvet Matte,vm,ce8440,29,0.69,0.81,62,6,206,132,64,62,22,47
+Maybelline,mb,Fit Me Matte,fmm,f7d1bc,21,0.24,0.97,87,7,247,209,188,87,10,15
+Maybelline,mb,Fit Me Matte,fmm,f3b989,27,0.44,0.95,80,7,243,185,137,80,15,32
+Maybelline,mb,Fit Me Matte,fmm,f0ba81,31,0.46,0.94,80,7,240,186,129,79,12,36
+Maybelline,mb,Fit Me Matte,fmm,ebba8a,30,0.41,0.92,79,7,235,186,138,79,12,31
+Maybelline,mb,Fit Me Matte,fmm,d69c74,24,0.46,0.84,69,7,214,156,116,69,17,29
+Maybelline,mb,Fit Me Matte,fmm,f9d0b0,26,0.29,0.98,86,7,249,208,176,86,10,21
+Maybelline,mb,Fit Me Matte,fmm,fbd5bd,23,0.25,0.98,86,7,251,213,189,88,10,17
+Maybelline,mb,Fit Me Matte,fmm,e7b9a2,20,0.3,0.91,79,7,231,185,162,79,13,18
+Maybelline,mb,Fit Me Matte,fmm,dcb297,23,0.31,0.86,76,7,220,178,151,76,11,20
+Maybelline,mb,Fit Me Matte,fmm,e6b898,25,0.34,0.9,78,7,230,184,152,78,12,23
+Maybelline,mb,Fit Me Matte,fmm,ebbf93,30,0.37,0.92,81,7,235,191,147,80,10,28
+Maybelline,mb,Fit Me Matte,fmm,efb793,23,0.38,0.94,79,7,239,183,147,79,16,26
+Maybelline,mb,Fit Me Matte,fmm,ebba8a,30,0.41,0.92,79,7,235,186,138,79,12,31
+Maybelline,mb,Fit Me Matte,fmm,f3b27d,27,0.49,0.95,78,7,243,178,125,78,18,36
+L'Oréal,lo,True Match,tms,693720,19,0.7,0.41,29,7,105,55,32,29,20,24
+L'Oréal,lo,True Match,tms,b07555,21,0.52,0.69,55,7,176,117,85,55,20,27
+L'Oréal,lo,True Match,tms,bc6d4e,17,0.59,0.74,55,7,188,109,78,54,28,31
+L'Oréal,lo,True Match,tms,c29979,26,0.38,0.76,67,7,194,153,121,66,11,23
+L'Oréal,lo,True Match,tms,ddb496,25,0.32,0.87,76,7,221,180,150,76,11,21
+L'Oréal,lo,True Match,tms,eebfa3,22,0.32,0.93,81,7,238,191,163,81,13,21
+L'Oréal,lo,True Match,tms,e7cbb5,26,0.22,0.91,84,7,231,203,181,84,6,15
+L'Oréal,lo,True Match,tms,dcb29a,22,0.3,0.86,76,7,220,178,154,76,12,18
+L'Oréal,lo,True Match,tms,f0c7b3,20,0.25,0.94,83,7,240,199,179,83,12,15
+L'Oréal,lo,True Match,tms,eecfba,24,0.22,0.93,85,7,238,207,186,85,8,14
+L'Oréal,lo,True Match,tms,e8c7b8,19,0.21,0.91,83,7,232,199,184,83,9,12
+L'Oréal,lo,True Match,tms,f0cbb9,20,0.23,0.94,85,7,240,203,185,84,10,14
+L'Oréal,lo,True Match,tms,e9c4b1,20,0.24,0.91,82,7,233,196,177,82,10,14
+L'Oréal,lo,True Match,tms,eabea1,24,0.31,0.92,80,7,234,190,161,80,12,21

@@ -16,7 +16,7 @@ gt = pd.concat([gt_black, gt_brown, gt_white], ignore_index=True)
 # 2. LOAD HASIL GRABCUT
 # =====================================================
 
-grabcut = pd.read_csv(r"skin_dataset_results_grabcut2_with_mesh.csv")
+grabcut = pd.read_csv(r"Ekstraksi/skin_dataset_results_grabcut2_with_mesh.csv")
 
 # =====================================================
 # 3. MERGE (tanpa rename apa pun)

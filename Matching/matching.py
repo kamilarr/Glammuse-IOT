@@ -15,7 +15,7 @@ def delta_e_cie76(lab1, lab2):
 # Load dataset
 # ----------------------------
 df_foundation = pd.read_csv(r"Dataset/LAB-Dataset-Shades.csv")     # sudah CIELAB asli
-df_skin = pd.read_csv(r"evaluation_deltaE_results2.csv")        # masih OpenCV LAB mentah
+df_skin = pd.read_csv(r"Evaluasi/evaluation_deltaE_results2.csv")  # masih OpenCV LAB mentah
 
 # ----------------------------
 # Convert skin OpenCV LAB → TRUE CIELAB
@@ -81,6 +81,6 @@ for idx, row in df_skin.iterrows():
 # Save output
 # ----------------------------
 df_output = pd.DataFrame(output_rows)
-df_output.to_csv("Skinshade_Matching_Result.csv", index=False)
+df_output.to_csv("Skinshade_Matching_Result2.csv", index=False)
 
 print("Matching selesai! Hasil tersimpan di Skinshade_Matching_Result.csv")

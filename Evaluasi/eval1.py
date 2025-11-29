@@ -6,9 +6,9 @@ from skimage.color import deltaE_ciede2000
 # 1. LOAD GROUNDTRUTH (3 FILE)
 # =====================================================
 
-gt_black = pd.read_csv(r"Dataset/hex_to_lab_output_black.csv")
-gt_brown = pd.read_csv(r"Dataset/hex_to_lab_output_brown.csv")
-gt_white = pd.read_csv(r"Dataset/hex_to_lab_output_white.csv")
+gt_black = pd.read_csv(r"Convert/hex_to_lab_output_black.csv")
+gt_brown = pd.read_csv(r"Convert/hex_to_lab_output_brown.csv")
+gt_white = pd.read_csv(r"Convert/hex_to_lab_output_white.csv")
 
 gt = pd.concat([gt_black, gt_brown, gt_white], ignore_index=True)
 
@@ -16,7 +16,7 @@ gt = pd.concat([gt_black, gt_brown, gt_white], ignore_index=True)
 # 2. LOAD HASIL GRABCUT
 # =====================================================
 
-grabcut = pd.read_csv(r"skin_dataset_results_grabcut2.csv")
+grabcut = pd.read_csv(r"skin_dataset_results_grabcut2_with_mesh.csv")
 
 # =====================================================
 # 3. MERGE (tanpa rename apa pun)

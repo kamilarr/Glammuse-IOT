@@ -10,7 +10,7 @@ import traceback
 # CONFIG
 # -----------------------
 BASE_FOLDER = "Dataset"            # folder berisi subfolder Black,Brown,White
-OUTPUT_CSV = "skin_dataset_results_grabcut2.csv"
+OUTPUT_CSV = "skin_dataset_results_grabcut2_with_mesh.csv"
 DEBUG_SAVE = True                  # kalau True simpan gambar debug ke folder debug_output/
 DEBUG_FOLDER = "debug_output"
 MIN_BBOX_SIZE = 30                 # minimal width/height bbox untuk GrabCut
@@ -27,6 +27,15 @@ mp_face = mp.solutions.face_detection
 face_detector = mp_face.FaceDetection(model_selection=0, min_detection_confidence=0.6)
 
 # -----------------------
+# MediaPipe Face Mesh (landmarks)
+# -----------------------
+mp_mesh = mp.solutions.face_mesh
+face_mesh = mp_mesh.FaceMesh(static_image_mode=True,
+                            max_num_faces=1,
+                            refine_landmarks=True,
+                            min_detection_confidence=0.5)
+
+# -----------------------
 # Haarcascade Fallback Detector
 # -----------------------
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
@@ -37,6 +46,31 @@ face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_fronta
 if DEBUG_SAVE and not os.path.exists(DEBUG_FOLDER):
     os.makedirs(DEBUG_FOLDER)
 
+# -----------------------
+# Landmark index groups (MediaPipe 468 / 478 refined)
+# -----------------------
+FACE_OVAL = [10,338,297,332,284,251,389,356,454,
+             323,361,288,397,365,379,378,400,
+             377,152,148,176,149,150,136,172,
+             58,132,93,234,127,162,21,54,103,67]
+
+LEFT_EYE = [33, 246, 161, 160, 159, 158, 157, 173]
+RIGHT_EYE = [263, 466, 388, 387, 386, 385, 384, 398]
+LEFT_BROW = [70,63,105,66,107]
+RIGHT_BROW = [336,296,334,293,300]
+OUTER_LIPS = [61,146,91,181,84,17,314,405,321,375,291,308]
+
+# -----------------------
+# Helpers: convert landmarks to pixel points
+# -----------------------
+def landmarks_to_points(landmarks, idxs, img_w, img_h):
+    pts = []
+    for i in idxs:
+        lm = landmarks[i]
+        x = int(lm.x * img_w)
+        y = int(lm.y * img_h)
+        pts.append([x, y])
+    return np.array(pts, np.int32)
 
 # -----------------------
 # 1) Deteksi wajah pake MediaPipe + padding
@@ -76,12 +110,10 @@ def detect_face_fallback(img):
     Coba MediaPipe dulu.
     Jika gagal → fallback Haarcascade.
     """
-    # 1) coba mediapipe
     mp_box = detect_face_mediapipe(img)
     if mp_box is not None:
         return mp_box
 
-    # 2) Haarcascade fallback
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     faces = face_cascade.detectMultiScale(
         gray,
@@ -93,11 +125,9 @@ def detect_face_fallback(img):
     if len(faces) == 0:
         return None
 
-    # ambil wajah terbesar (paling masuk akal)
     faces = sorted(faces, key=lambda f: f[2] * f[3], reverse=True)
     x, y, w, h = faces[0]
 
-    # tambahkan padding biar mirip mediapipe
     ih, iw = img.shape[:2]
     pad = int(PAD_RATIO * h)
 
@@ -157,7 +187,6 @@ def apply_grabcut_with_fallback(img, face_box):
             img_fg = img * full_mask[:, :, np.newaxis]
             return img_fg, full_mask.astype(np.uint8)
 
-
 # -----------------------
 # 3) CLAHE in YCrCb
 # -----------------------
@@ -170,7 +199,6 @@ def apply_clahe_ycrcb(img):
     img_clahe = cv2.cvtColor(merged, cv2.COLOR_YCrCb2BGR)
     return img_clahe, merged
 
-
 # -----------------------
 # 4) Initial skin mask (HSV + YCrCb) - improved ranges + cleaning
 # -----------------------
@@ -178,51 +206,95 @@ def initial_skin_mask(face_roi):
     if face_roi is None or face_roi.size == 0:
         return np.zeros((0, 0), dtype=np.uint8)
 
-    # Convert
     hsv = cv2.cvtColor(face_roi, cv2.COLOR_BGR2HSV)
     ycrcb = cv2.cvtColor(face_roi, cv2.COLOR_BGR2YCrCb)
 
-    # HSV: generous but avoids blues; tuned for wide skin tones
     mask_hsv = cv2.inRange(hsv, np.array([0, 15, 30], np.uint8), np.array([35, 255, 255], np.uint8))
-
-    # YCrCb: common skin detection band (papers often use Cr between ~135-180)
     mask_ycrcb = cv2.inRange(ycrcb, np.array([0, 135, 85], np.uint8), np.array([255, 180, 135], np.uint8))
 
     mask = cv2.bitwise_and(mask_hsv, mask_ycrcb)
 
-    # clean small holes and noise
     kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
     mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel, iterations=2)
     mask = cv2.GaussianBlur(mask, (5, 5), 0)
 
-    # ensure binary 0/255
     _, mask_bin = cv2.threshold(mask, 10, 255, cv2.THRESH_BINARY)
     return mask_bin
 
-
 # -----------------------
-# 5) K-Means dominant color (works on BGR pixels)
+# 5) Dominant color
 # -----------------------
 def dominant_color(img, mask, k=KMEANS_K):
-    # mask expected 0 or 255; select pixels where mask>0
     pixels = img[mask > 0]
     if len(pixels) == 0:
         return None
 
     pixels = pixels.reshape(-1, 3).astype(np.float32)
-    # optionally filter extremely dark/bright pixels (remove specular)
-    # keep as-is for now
     kmeans = KMeans(n_clusters=k, n_init=KMEANS_N_INIT, random_state=42)
     kmeans.fit(pixels)
 
     counts = np.bincount(kmeans.labels_)
     dominant = kmeans.cluster_centers_[np.argmax(counts)]
-    # dominant is in BGR order (since img is BGR)
     return dominant.astype(int)
 
+# -----------------------
+# 6) Build masks from FaceMesh (full-image masks)
+# -----------------------
+def build_masks_from_mesh(img, face_box):
+    ih, iw = img.shape[:2]
+    # run face_mesh on RGB image
+    img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    results = face_mesh.process(img_rgb)
+    face_mask_full = np.zeros((ih, iw), dtype=np.uint8)
+    feature_mask_full = np.zeros((ih, iw), dtype=np.uint8)
+    mesh_draw = img.copy()
+
+    if not results.multi_face_landmarks:
+        return face_mask_full, feature_mask_full, mesh_draw
+
+    lm = results.multi_face_landmarks[0].landmark
+
+    # face oval
+    try:
+        oval_pts = landmarks_to_points(lm, FACE_OVAL, iw, ih)
+        if oval_pts.shape[0] >= 3:
+            # optionally use convex hull to ensure closed area
+            hull = cv2.convexHull(oval_pts)
+            cv2.fillPoly(face_mask_full, [hull], 255)
+            cv2.polylines(mesh_draw, [hull], True, (0,255,0), 1)
+    except Exception:
+        pass
+
+    # eyes, brows, lips -> feature mask (to be removed)
+    try:
+        le_pts = landmarks_to_points(lm, LEFT_EYE, iw, ih)
+        re_pts = landmarks_to_points(lm, RIGHT_EYE, iw, ih)
+        lb_pts = landmarks_to_points(lm, LEFT_BROW, iw, ih)
+        rb_pts = landmarks_to_points(lm, RIGHT_BROW, iw, ih)
+        lip_pts = landmarks_to_points(lm, OUTER_LIPS, iw, ih)
+
+        if le_pts.shape[0] >= 3:
+            cv2.fillPoly(feature_mask_full, [le_pts], 255)
+            cv2.polylines(mesh_draw, [le_pts], True, (0,0,255), 1)
+        if re_pts.shape[0] >= 3:
+            cv2.fillPoly(feature_mask_full, [re_pts], 255)
+            cv2.polylines(mesh_draw, [re_pts], True, (0,0,255), 1)
+        if lb_pts.shape[0] >= 3:
+            cv2.fillPoly(feature_mask_full, [lb_pts], 255)
+            cv2.polylines(mesh_draw, [lb_pts], True, (255,0,0), 1)
+        if rb_pts.shape[0] >= 3:
+            cv2.fillPoly(feature_mask_full, [rb_pts], 255)
+            cv2.polylines(mesh_draw, [rb_pts], True, (255,0,0), 1)
+        if lip_pts.shape[0] >= 3:
+            cv2.fillPoly(feature_mask_full, [lip_pts], 255)
+            cv2.polylines(mesh_draw, [lip_pts], True, (0,255,255), 1)
+    except Exception:
+        pass
+
+    return face_mask_full, feature_mask_full, mesh_draw
 
 # -----------------------
-# 6) Process folder to CSV (LAB added)
+# 7) Process folder to CSV (LAB added)
 # -----------------------
 def process_folder_to_csv(base_folder=BASE_FOLDER, output_csv=OUTPUT_CSV):
     rows = []
@@ -258,7 +330,7 @@ def process_folder_to_csv(base_folder=BASE_FOLDER, output_csv=OUTPUT_CSV):
                     continue
 
                 grab_img, grab_mask = apply_grabcut_with_fallback(img, face_box)
-                # grab_mask currently 0/1 or 0/255 depending on branch. Normalize to 0/255
+                # normalize grab_mask to 0/255
                 if grab_mask.max() <= 1:
                     grab_mask255 = (grab_mask * 255).astype(np.uint8)
                 else:
@@ -267,28 +339,23 @@ def process_folder_to_csv(base_folder=BASE_FOLDER, output_csv=OUTPUT_CSV):
                 clahe_img, ycrcb = apply_clahe_ycrcb(grab_img)
 
                 x, y, w, h = face_box
-                # create color_mask_patch in CLAHE-ed image coordinates (use ROI)
                 roi_for_mask = clahe_img[y:y+h, x:x+w]
                 color_mask_patch = initial_skin_mask(roi_for_mask)
                 color_mask = np.zeros(img.shape[:2], dtype=np.uint8)
 
                 if color_mask_patch.size != 0:
-                    # color_mask_patch is 0/255, place into full mask
                     color_mask[y:y+h, x:x+w] = color_mask_patch
 
                 combined_mask = cv2.bitwise_and(grab_mask255, color_mask)
 
-                # If combined mask too small, prefer color_mask (skin detector) rather than raw grabcut
+                # If combined mask too small, prefer color_mask or grabcut as before
                 if int(np.count_nonzero(combined_mask)) < MIN_SKIN_PIXELS:
-                    # fallback to color_mask if that has enough pixels
                     if int(np.count_nonzero(color_mask)) >= MIN_SKIN_PIXELS:
                         combined_mask = color_mask.copy()
                     else:
-                        # else fallback to grab_mask255 if grabcut is big enough
                         if int(np.count_nonzero(grab_mask255)) >= MIN_SKIN_PIXELS:
                             combined_mask = grab_mask255.copy()
                         else:
-                            # final fallback: use a slightly eroded center rectangle (avoid background)
                             cx = x + w // 2
                             cy = y + h // 2
                             small_w = max(10, w // 4)
@@ -301,7 +368,24 @@ def process_folder_to_csv(base_folder=BASE_FOLDER, output_csv=OUTPUT_CSV):
                             final_mask[sy:ey, sx:ex] = 255
                             combined_mask = final_mask
 
-                # compute number of pixels used
+                # --- NEW: refine masks using Face Mesh ---
+                face_mask_full, feature_mask_full, mesh_draw = build_masks_from_mesh(img, face_box)
+                # final face-only mask = face_mask - feature_mask
+                refined_face = cv2.subtract(face_mask_full, feature_mask_full)
+                # intersect refined_face with combined_mask to avoid background leakage
+                # ensure both are 0/255
+                if refined_face.max() > 0:
+                    combined_mask = cv2.bitwise_and(combined_mask, refined_face)
+
+                # if combined mask ends up tiny, fallback to previous logic (avoid losing everything)
+                if int(np.count_nonzero(combined_mask)) < MIN_SKIN_PIXELS:
+                    # try using refined_face alone
+                    if int(np.count_nonzero(refined_face)) >= MIN_SKIN_PIXELS:
+                        combined_mask = refined_face.copy()
+                    else:
+                        # keep previous combined_mask as-is (already computed)
+                        pass
+
                 used_pixels = int(np.count_nonzero(combined_mask))
 
                 dom = dominant_color(clahe_img, combined_mask)
@@ -310,13 +394,8 @@ def process_folder_to_csv(base_folder=BASE_FOLDER, output_csv=OUTPUT_CSV):
                     rows.append([fname, label, None, None, None, None, None, None, "no_skin_pixels"])
                     failed += 1
                 else:
-                    # dom is BGR
                     b, g, r = int(dom[0]), int(dom[1]), int(dom[2])
-
-                    # Convert to RGB for CSV (standard)
                     R_csv, G_csv, B_csv = r, g, b
-
-                    # LAB from BGR pixel (OpenCV expects BGR)
                     bgr_pixel = np.uint8([[[b, g, r]]])
                     lab_pixel = cv2.cvtColor(bgr_pixel, cv2.COLOR_BGR2LAB)
                     L, A, B_lab = lab_pixel[0][0]
@@ -326,7 +405,7 @@ def process_folder_to_csv(base_folder=BASE_FOLDER, output_csv=OUTPUT_CSV):
                     rows.append([fname, label, R_csv, G_csv, B_csv, L, A, B_lab, "ok"])
 
                     if DEBUG_SAVE:
-                        save_debug_visuals(path, img, face_box, grab_mask255, combined_mask, (R_csv, G_csv, B_csv), label, fname)
+                        save_debug_visuals(path, img, face_box, grab_mask255, combined_mask, (R_csv, G_csv, B_csv), label, fname, mesh_draw, refined_face)
 
             except Exception as e:
                 print("Error:", str(e))
@@ -343,51 +422,63 @@ def process_folder_to_csv(base_folder=BASE_FOLDER, output_csv=OUTPUT_CSV):
     df.to_csv(output_csv, index=False)
     print(f"\nDONE. Total: {total}, Failed: {failed}. CSV: {output_csv}")
 
-
 # -----------------------
-# debug save function (fixed BGR/RGB order and robust stacking)
+# debug save function (updated)
 # -----------------------
-def save_debug_visuals(original_path, orig_img, face_box, grab_mask255, combined_mask, dom_rgb, label, fname):
+def save_debug_visuals(original_path, orig_img, face_box, grab_mask255, combined_mask, dom_rgb, label, fname, mesh_draw=None, refined_face=None):
     try:
         base = os.path.join(DEBUG_FOLDER, label)
         if not os.path.exists(base):
             os.makedirs(base)
 
-        # Visuals: draw bbox on original
         img_vis = orig_img.copy()
         x, y, w, h = face_box
         cv2.rectangle(img_vis, (x, y), (x+w, y+h), (0, 255, 0), 2)
 
-        # Grab mask visualization (convert to 3-channel)
         grab_vis = grab_mask255.copy()
         if grab_vis.max() <= 1:
             grab_vis = (grab_vis * 255).astype(np.uint8)
         grab_color = cv2.cvtColor(grab_vis, cv2.COLOR_GRAY2BGR)
         overlay = cv2.addWeighted(img_vis, 0.7, grab_color, 0.3, 0)
 
-        # Combined mask applied to original image
         comb_vis = cv2.bitwise_and(orig_img, orig_img, mask=combined_mask)
 
-        # Create dom patch: dom_rgb is (R,G,B) for CSV; convert to BGR for OpenCV display
         R, G, B = dom_rgb
         dom_patch = np.full((100, 100, 3), (int(B), int(G), int(R)), dtype=np.uint8)
 
-        # Resize panels to common height for stacking
-        height = img_vis.shape[0]
-        # make sure other images have same size as original for neat stacking
+        # mesh overlay if exists
+        if mesh_draw is None:
+            mesh_draw = img_vis.copy()
+
+        # refined face mask visualization (convert to BGR)
+        if refined_face is None:
+            refined_face_vis = np.zeros_like(img_vis)
+        else:
+            rf = refined_face.copy()
+            if rf.max() <= 1:
+                rf = (rf * 255).astype(np.uint8)
+            refined_face_vis = cv2.bitwise_and(orig_img, orig_img, mask=rf)
+            # draw semi-transparent overlay
+            overlay2 = img_vis.copy()
+            mask_color = np.zeros_like(img_vis)
+            mask_color[:, :] = (0, 128, 255)
+            alpha = 0.5
+            mask3ch = cv2.cvtColor(rf, cv2.COLOR_GRAY2BGR)
+            overlay2 = np.where(mask3ch==255, (overlay2 * (1 - alpha) + mask_color * alpha).astype(np.uint8), overlay2)
+
+        # resize for stacking
+        h0, w0 = img_vis.shape[:2]
         def ensure_size(img, target_shape):
             return cv2.resize(img, (target_shape[1], target_shape[0]), interpolation=cv2.INTER_AREA)
 
-        grab_vis_resized = ensure_size(overlay, img_vis.shape)
+        mesh_vis_resized = ensure_size(mesh_draw, img_vis.shape)
         comb_vis_resized = ensure_size(comb_vis, img_vis.shape)
-        dom_patch_resized = ensure_size(dom_patch, (img_vis.shape[0], img_vis.shape[1]//4))
+        refined_vis_resized = ensure_size(refined_face_vis, img_vis.shape)
+        dom_patch_resized = ensure_size(dom_patch, (img_vis.shape[0]//4, img_vis.shape[1]//4))
 
-        # Build layout: left-to-right: original with bbox | overlay | combined ; bottom: dom patch
-        top = np.hstack([img_vis, grab_vis_resized, comb_vis_resized])
-        # pad dom_patch_resized width to match top width
-        dom_full = np.zeros_like(top)
-        w_dom = dom_patch_resized.shape[1]
-        dom_full[:dom_patch_resized.shape[0], :w_dom] = dom_patch_resized
+        top = np.hstack([img_vis, mesh_vis_resized, comb_vis_resized])
+        dom_full = np.zeros((dom_patch_resized.shape[0], top.shape[1], 3), dtype=np.uint8)
+        dom_full[:dom_patch_resized.shape[0], :dom_patch_resized.shape[1]] = dom_patch_resized
         out = np.vstack([top, dom_full])
 
         save_path = os.path.join(base, f"debug_{fname}")
@@ -395,7 +486,6 @@ def save_debug_visuals(original_path, orig_img, face_box, grab_mask255, combined
 
     except Exception as e:
         print("Failed to save debug visuals:", e)
-
 
 # -----------------------
 # MAIN

@@ -1,7 +1,7 @@
 import pandas as pd
 
 # Load CSV
-df = pd.read_csv("evaluation_deltaE_results2.csv")
+df = pd.read_csv("Evaluasi/evaluation_deltaE_results2.csv")
 
 # Filter DeltaE > 20
 df_outliers = df[df["DeltaE"] > 20]
@@ -18,13 +18,13 @@ print("\nData lengkap:")
 print(df_outliers)
 
 # Simpan ke CSV baru
-df_outliers.to_csv("deltaE_above_20.csv", index=False)
+df_outliers.to_csv("Evaluasi/deltaE_above_20.csv", index=False)
 print("\nHasil disimpan ke deltaE_above_20.csv")
 
 import pandas as pd
 
 # Load CSV
-df = pd.read_csv("evaluation_deltaE_results2.csv")
+df = pd.read_csv("Evaluasi/evaluation_deltaE_results2.csv")
 
 # Filter DeltaE > 20
 df_outliers = df[df["DeltaE"] > 20]

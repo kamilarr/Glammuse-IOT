@@ -81,6 +81,6 @@ for idx, row in df_skin.iterrows():
 # Save output
 # ----------------------------
 df_output = pd.DataFrame(output_rows)
-df_output.to_csv("Skinshade_Matching_Result2.csv", index=False)
+df_output.to_csv("Matching/Skinshade_Matching_Result2.csv", index=False)
 
 print("Matching selesai! Hasil tersimpan di Skinshade_Matching_Result.csv")

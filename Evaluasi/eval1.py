@@ -57,5 +57,5 @@ merged["DeltaE"] = merged.apply(compute_deltaE, axis=1).round(2)
 # 5. SIMPAN HASIL
 # =====================================================
 
-merged.to_csv("evaluation_deltaE_results2.csv", index=False)
+merged.to_csv("Evaluasi/evaluation_deltaE_results2.csv", index=False)
 print("Evaluasi selesai! Hasil disimpan di evaluation_deltaE_results2.csv")

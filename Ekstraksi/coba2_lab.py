@@ -291,6 +291,9 @@ def build_masks_from_mesh(img, face_box):
     except Exception:
         pass
 
+    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (35, 35))
+    feature_mask_full = cv2.dilate(feature_mask_full, kernel, iterations=1)
+
     return face_mask_full, feature_mask_full, mesh_draw
 
 # -----------------------

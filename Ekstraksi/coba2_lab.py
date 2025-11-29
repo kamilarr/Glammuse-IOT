@@ -248,6 +248,9 @@ def build_masks_from_mesh(img, face_box):
     face_mask_full = np.zeros((ih, iw), dtype=np.uint8)
     feature_mask_full = np.zeros((ih, iw), dtype=np.uint8)
     mesh_draw = img.copy()
+    mask_eyes = np.zeros_like(feature_mask_full)
+    mask_brows = np.zeros_like(feature_mask_full)
+    mask_mouth = np.zeros_like(feature_mask_full)
 
     if not results.multi_face_landmarks:
         return face_mask_full, feature_mask_full, mesh_draw
@@ -274,25 +277,28 @@ def build_masks_from_mesh(img, face_box):
         lip_pts = landmarks_to_points(lm, OUTER_LIPS, iw, ih)
 
         if le_pts.shape[0] >= 3:
-            cv2.fillPoly(feature_mask_full, [le_pts], 255)
+            cv2.fillPoly(mask_eyes, [le_pts], 255)
             cv2.polylines(mesh_draw, [le_pts], True, (0,0,255), 1)
         if re_pts.shape[0] >= 3:
-            cv2.fillPoly(feature_mask_full, [re_pts], 255)
+            cv2.fillPoly(mask_eyes, [re_pts], 255)
             cv2.polylines(mesh_draw, [re_pts], True, (0,0,255), 1)
         if lb_pts.shape[0] >= 3:
-            cv2.fillPoly(feature_mask_full, [lb_pts], 255)
+            cv2.fillPoly(mask_brows, [lb_pts], 255)
             cv2.polylines(mesh_draw, [lb_pts], True, (255,0,0), 1)
         if rb_pts.shape[0] >= 3:
-            cv2.fillPoly(feature_mask_full, [rb_pts], 255)
+            cv2.fillPoly(mask_brows, [rb_pts], 255)
             cv2.polylines(mesh_draw, [rb_pts], True, (255,0,0), 1)
         if lip_pts.shape[0] >= 3:
-            cv2.fillPoly(feature_mask_full, [lip_pts], 255)
+            cv2.fillPoly(mask_mouth, [lip_pts], 255)
             cv2.polylines(mesh_draw, [lip_pts], True, (0,255,255), 1)
     except Exception:
         pass
 
-    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (35, 35))
-    feature_mask_full = cv2.dilate(feature_mask_full, kernel, iterations=1)
+    kernel_eye = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (15,15))
+    mask_eyes = cv2.dilate(mask_eyes, kernel_eye, iterations=1)
+
+    feature_mask_full = cv2.bitwise_or(mask_eyes, mask_brows)
+    feature_mask_full = cv2.bitwise_or(feature_mask_full, mask_mouth)
 
     return face_mask_full, feature_mask_full, mesh_draw
 

@@ -16,7 +16,7 @@ gt = pd.concat([gt_black, gt_brown, gt_white], ignore_index=True)
 # 2. LOAD HASIL GRABCUT
 # =====================================================
 
-grabcut = pd.read_csv(r"Ekstraksi/skin_dataset_results_grabcut2.csv")
+grabcut = pd.read_csv(r"skin_dataset_results_grabcut2.csv")
 
 # =====================================================
 # 3. MERGE (tanpa rename apa pun)
@@ -57,5 +57,5 @@ merged["DeltaE"] = merged.apply(compute_deltaE, axis=1).round(2)
 # 5. SIMPAN HASIL
 # =====================================================
 
-merged.to_csv("Evaluasi/evaluation_deltaE_results.csv", index=False)
+merged.to_csv("evaluation_deltaE_results2.csv", index=False)
 print("Evaluasi selesai! Hasil disimpan di evaluation_deltaE_results2.csv")

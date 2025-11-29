@@ -10,7 +10,7 @@ import traceback
 # CONFIG
 # -----------------------
 BASE_FOLDER = "Dataset"            # folder berisi subfolder Black,Brown,White
-OUTPUT_CSV = "skin_dataset_results_grabcut.csv"
+OUTPUT_CSV = "skin_dataset_results_grabcut2.csv"
 DEBUG_SAVE = True                  # kalau True simpan gambar debug ke folder debug_output/
 DEBUG_FOLDER = "debug_output"
 MIN_BBOX_SIZE = 30                 # minimal width/height bbox untuk GrabCut

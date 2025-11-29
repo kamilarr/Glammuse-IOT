@@ -1,0 +1,3 @@
+filename,label,R_grabcut,G_grabcut,B_grabcut,L_grabcut,A_grabcut,B_lab_grabcut,status,Filename,Hex,R_gt,G_gt,B_gt,L_gt,A_gt,B_lab_gt,DeltaE
+black (33).jpg,Black,219,156,118,178,147,157,ok,black (33).jpg,#A1623D,161,98,61,122,150,160,22.42
+black (85).jpg,Black,197,148,127,167,144,146,ok,black (85).jpg,#8B5032,139,80,50,103,150,156,28.19

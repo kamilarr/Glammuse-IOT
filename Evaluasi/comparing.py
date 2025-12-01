@@ -1,16 +1,11 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# ================================
-# LOAD FILE
-# ================================
+# Load File CSV
 clahe = pd.read_csv(r"Evaluasi/evaluation_deltaE_Clahe.csv")
 he    = pd.read_csv(r"Evaluasi/evaluation_deltaE_HE.csv")
 
-# ================================
-# FUNGSI HITUNG PERSENTASE
-# ================================
-
+# Hitung Presentase
 def compute_percentage(df):
     total = len(df)
     below_20 = (df["DeltaE"] <= 20).sum()
@@ -30,10 +25,8 @@ def compute_percentage(df):
 clahe_pct = compute_percentage(clahe)
 he_pct = compute_percentage(he)
 
-# ================================
-# TAMPILKAN HASIL
-# ================================
-print("\n===== PERBANDINGAN PERSENTASE DELTAE (<20 vs ≥20) =====\n")
+# Hasil
+print("\nPerbandingan Persentase DeltaE\n")
 
 print(">> CLAHE")
 print(f"DeltaE <= 20 : {clahe_pct['below_20_count']} data ({clahe_pct['below_20_percent']:.2f}%)")
@@ -43,35 +36,30 @@ print("\n>> HE")
 print(f"DeltaE <= 20 : {he_pct['below_20_count']} data ({he_pct['below_20_percent']:.2f}%)")
 print(f"DeltaE > 20: {he_pct['above_20_count']} data ({he_pct['above_20_percent']:.2f}%)")
 
-# ================================
-# KESIMPULAN
-# ================================
-print("\n===== KESIMPULAN =====")
+# Hasil Akhir
+print("\nHasil Akhir")
 
 if clahe_pct["below_20_percent"] > he_pct["below_20_percent"]:
-    print("CLAHE lebih baik: lebih banyak data dengan DeltaE < 20.")
+    print("Perhitungan dengan CLAHE lebih baik karena persentase DeltaE di bawah 20 lebih kecil")
 else:
-    print("HE lebih baik: lebih banyak data dengan DeltaE < 20.")
+    print("Perhitungan dengan HE lebih baik karena persentase DeltaE di bawah 20 lebih kecil")
 
-# ================================
-# VISUALISASI GRAFIK
-# ================================
-
+# Visualisasi Grafik
 methods = ["CLAHE", "HE"]
 
-# ===== Bar chart: DeltaE < 20 =====
+# Bar Chart Di Bawah 20
 plt.figure(figsize=(6,4))
 plt.bar(methods, [clahe_pct["below_20_percent"], he_pct["below_20_percent"]])
 plt.ylabel("Percentage (%)")
-plt.title("Persentase DeltaE < 20 • CLAHE vs HE")
+plt.title("Persentase DeltaE < 20 CLAHE vs HE")
 plt.tight_layout()
 plt.show()
 
-# ===== Bar chart: DeltaE ≥ 20 =====
+# Bar Chart Di Atas 20
 plt.figure(figsize=(6,4))
 plt.bar(methods, [clahe_pct["above_20_percent"], he_pct["above_20_percent"]])
 plt.ylabel("Percentage (%)")
-plt.title("Persentase DeltaE ≥ 20 • CLAHE vs HE")
+plt.title("Persentase DeltaE ≥ 20 CLAHE vs HE")
 plt.tight_layout()
 plt.show()
 

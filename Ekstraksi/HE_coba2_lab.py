@@ -10,7 +10,7 @@ import traceback
 # CONFIG
 # -----------------------
 BASE_FOLDER = "Dataset"            # folder berisi subfolder Black,Brown,White
-OUTPUT_CSV = "Ekstraksi/skin_dataset_results_fix.csv"
+OUTPUT_CSV = "Ekstraksi/HE_skin_dataset_results.csv"
 DEBUG_SAVE = True                  # kalau True simpan gambar debug ke folder debug_output/
 DEBUG_FOLDER = "debug_output"
 MIN_BBOX_SIZE = 30                 # minimal width/height bbox untuk GrabCut
@@ -188,9 +188,9 @@ def apply_grabcut_with_fallback(img, face_box):
             return img_fg, full_mask.astype(np.uint8)
 
 # -----------------------
-# 3) CLAHE in YCrCb
+# 3) Histogram Equalization (HE) in YCrCb
 # -----------------------
-def apply_clahe_ycrcb(img):
+def apply_he_ycrcb(img):
     # Histogram Equalization (HE) pada channel Y (brightness)
     ycrcb = cv2.cvtColor(img, cv2.COLOR_BGR2YCrCb)
     y, cr, cb = cv2.split(ycrcb)
@@ -348,10 +348,10 @@ def process_folder_to_csv(base_folder=BASE_FOLDER, output_csv=OUTPUT_CSV):
                 else:
                     grab_mask255 = grab_mask.astype(np.uint8)
 
-                clahe_img, ycrcb = apply_clahe_ycrcb(grab_img)
+                he_img, ycrcb = apply_he_ycrcb(grab_img)
 
                 x, y, w, h = face_box
-                roi_for_mask = clahe_img[y:y+h, x:x+w]
+                roi_for_mask = he_img[y:y+h, x:x+w]
                 color_mask_patch = initial_skin_mask(roi_for_mask)
                 color_mask = np.zeros(img.shape[:2], dtype=np.uint8)
 
@@ -400,7 +400,7 @@ def process_folder_to_csv(base_folder=BASE_FOLDER, output_csv=OUTPUT_CSV):
 
                 used_pixels = int(np.count_nonzero(combined_mask))
 
-                dom = dominant_color(clahe_img, combined_mask)
+                dom = dominant_color(he_img, combined_mask)
                 if dom is None:
                     print("No skin pixels.")
                     rows.append([fname, label, None, None, None, None, None, None, "no_skin_pixels"])

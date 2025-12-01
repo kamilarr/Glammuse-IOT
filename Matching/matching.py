@@ -64,17 +64,17 @@ for idx, row in df_skin.iterrows():
         "recommend_1_brand": top3.iloc[0]["brand"],
         "recommend_1_product": top3.iloc[0]["product"],
         "recommend_1_hex": top3.iloc[0]["hex"],
-        "recommend_1_deltaE": top3.iloc[0]["DeltaE"],
+        "recommend_1_deltaE": round(top3.iloc[0]["DeltaE"], 2),
 
         "recommend_2_brand": top3.iloc[1]["brand"],
         "recommend_2_product": top3.iloc[1]["product"],
         "recommend_2_hex": top3.iloc[1]["hex"],
-        "recommend_2_deltaE": top3.iloc[1]["DeltaE"],
+        "recommend_2_deltaE": round(top3.iloc[0]["DeltaE"], 2),
 
         "recommend_3_brand": top3.iloc[2]["brand"],
         "recommend_3_product": top3.iloc[2]["product"],
         "recommend_3_hex": top3.iloc[2]["hex"],
-        "recommend_3_deltaE": top3.iloc[2]["DeltaE"],
+        "recommend_3_deltaE": round(top3.iloc[0]["DeltaE"], 2),
     })
 
 # ----------------------------

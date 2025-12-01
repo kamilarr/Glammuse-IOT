@@ -13,35 +13,11 @@ gt_white = pd.read_csv(r"Convert/hex_to_lab_output_white.csv")
 gt = pd.concat([gt_black, gt_brown, gt_white], ignore_index=True)
 
 # =====================================================
-# 2. LOAD HASIL GRABCUT
-# =====================================================
-
-grabcut = pd.read_csv(r"Ekstraksi/HE_skin_dataset_results.csv")
-
-# =====================================================
-# 3. MERGE (tanpa rename apa pun)
-# =====================================================
-
-merged = pd.merge(
-    grabcut,
-    gt,
-    left_on="filename",
-    right_on="Filename",
-    how="inner",
-    suffixes=("_grabcut", "_gt")
-)
-
-print("Jumlah data berhasil di-merge:", len(merged))
-
-# =====================================================
-# 4. HITUNG DeltaE CIEDE2000 (pakai CIELAB dari CSV)
+# 2. FUNGSI HITUNG DELTA E
 # =====================================================
 
 def compute_deltaE(row):
-    # dari hasil ekstraksi
     L1, a1, b1 = row["L_grabcut"], row["A_grabcut"], row["B_lab_grabcut"]
-
-    # dari groundtruth HEX→LAB
     L2, a2, b2 = row["L_gt"], row["A_gt"], row["B_lab_gt"]
 
     color1 = np.array([[L1, a1, b1]])
@@ -50,12 +26,45 @@ def compute_deltaE(row):
     delta = deltaE_ciede2000(color1, color2)
     return float(delta)
 
-
-merged["DeltaE"] = merged.apply(compute_deltaE, axis=1).round(2)
-
 # =====================================================
-# 5. SIMPAN HASIL
+# 3. FUNGSI EVALUASI UNTUK SATU FILE
 # =====================================================
 
-merged.to_csv("Evaluasi/evaluation_deltaE_HE.csv", index=False)
-print("Evaluasi selesai! Hasil disimpan di evaluation_deltaE_results.csv")
+def evaluate_file(extract_csv_path, output_path):
+    print(f"\n=== Evaluasi: {extract_csv_path} ===")
+
+    # load hasil ekstraksi
+    df_extract = pd.read_csv(extract_csv_path)
+
+    # merge dengan groundtruth
+    merged = pd.merge(
+        df_extract,
+        gt,
+        left_on="filename",
+        right_on="Filename",
+        how="inner",
+        suffixes=("_grabcut", "_gt")
+    )
+
+    print("Jumlah data berhasil di-merge:", len(merged))
+
+    # hitung deltaE
+    merged["DeltaE"] = merged.apply(compute_deltaE, axis=1).round(2)
+
+    # simpan hasil
+    merged.to_csv(output_path, index=False)
+    print("Selesai! Disimpan ke:", output_path)
+
+# =====================================================
+# 4. JALANKAN UNTUK HE & CLAHE
+# =====================================================
+
+evaluate_file(
+    extract_csv_path="Ekstraksi/HE_skin_dataset_results.csv",
+    output_path="Evaluasi/evaluation_deltaE_HE.csv"
+)
+
+evaluate_file(
+    extract_csv_path="Ekstraksi/CLAHE_skin_dataset_results.csv",
+    output_path="Evaluasi/evaluation_deltaE_CLAHE.csv"
+)

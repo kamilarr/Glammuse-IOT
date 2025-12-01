@@ -1,15 +1,15 @@
 filename,label,R,G,B,L,A,B_lab,status
 black (1).jpg,Black,133,83,65,103,147,147,ok
-black (10).jpg,Black,64,46,28,53,134,143,ok
+black (10).jpg,Black,203,154,127,172,143,149,ok
 black (100).jpg,Black,118,75,50,92,143,150,ok
 black (101).jpg,Black,82,66,56,75,133,137,ok
 black (102).jpg,Black,100,64,50,79,142,143,ok
 black (103).jpg,Black,97,75,61,86,135,140,ok
 black (104).jpg,Black,102,76,59,88,137,142,ok
 black (105).jpg,Black,99,57,44,73,146,144,ok
-black (106).jpg,Black,164,127,116,144,141,139,ok
+black (106).jpg,Black,153,86,52,112,153,160,ok
 black (107).jpg,Black,76,58,48,66,135,137,ok
-black (108).jpg,Black,95,54,49,70,145,139,ok
+black (108).jpg,Black,196,141,113,162,145,151,ok
 black (109).jpg,Black,118,92,70,105,135,145,ok
 black (11).jpg,Black,94,74,65,85,135,136,ok
 black (110).jpg,Black,193,139,118,160,146,147,ok
@@ -24,7 +24,7 @@ black (118).jpg,Black,125,84,65,101,143,146,ok
 black (119).jpg,Black,113,75,57,91,142,145,ok
 black (12).jpg,Black,212,154,131,175,147,149,ok
 black (120).jpg,Black,93,50,37,66,146,145,ok
-black (121).jpg,Black,72,51,48,60,137,134,ok
+black (121).jpg,Black,92,67,49,78,136,143,ok
 black (122).jpg,Black,79,58,43,67,135,141,ok
 black (123).jpg,Black,97,70,51,82,137,144,ok
 black (124).jpg,Black,114,82,62,96,139,145,ok
@@ -59,7 +59,7 @@ black (37).jpg,Black,121,89,71,104,138,143,ok
 black (38).jpg,Black,124,78,56,97,145,149,ok
 black (39).jpg,Black,127,80,56,99,145,150,ok
 black (4).jpg,Black,76,58,48,66,135,137,ok
-black (40).jpg,Black,83,62,61,72,137,132,ok
+black (40).jpg,Black,199,150,117,168,142,153,ok
 black (41).jpg,Black,203,142,117,164,148,151,ok
 black (42).jpg,Black,95,67,59,80,139,138,ok
 black (43).jpg,Black,122,73,54,93,147,148,ok
@@ -147,7 +147,7 @@ brown (116).jpg,Brown,170,111,92,134,149,148,ok
 brown (117).jpg,Brown,219,173,127,188,139,158,ok
 brown (118).jpg,Brown,213,157,146,178,147,142,ok
 brown (119).jpg,Brown,246,172,136,196,151,157,ok
-brown (12).jpg,Brown,191,150,145,168,143,137,ok
+brown (12).jpg,Brown,211,159,122,177,143,155,ok
 brown (120).jpg,Brown,222,174,144,191,141,150,ok
 brown (121).jpg,Brown,216,155,124,176,147,153,ok
 brown (122).jpg,Brown,213,159,138,179,145,147,ok
@@ -166,10 +166,10 @@ brown (20).jpg,Brown,204,142,103,164,147,158,ok
 brown (21).jpg,Brown,207,144,106,166,147,158,ok
 brown (22).jpg,Brown,131,85,59,104,144,151,ok
 brown (23).jpg,Brown,230,180,144,196,141,153,ok
-brown (24).jpg,Brown,178,142,134,159,140,137,ok
+brown (24).jpg,Brown,219,159,112,179,145,161,ok
 brown (25).jpg,Brown,216,168,148,186,143,145,ok
 brown (26).jpg,Brown,223,168,137,187,144,152,ok
-brown (27).jpg,Brown,225,170,143,189,145,150,ok
+brown (27).jpg,Brown,225,169,143,188,145,149,ok
 brown (28).jpg,Brown,214,169,140,185,140,149,ok
 brown (29).jpg,Brown,213,165,143,183,143,146,ok
 brown (3).jpg,Brown,199,143,109,164,145,155,ok
@@ -298,7 +298,7 @@ white (27).jpg,White,226,206,183,214,131,142,ok
 white (28).jpg,White,223,175,162,193,144,141,ok
 white (29).jpg,White,232,190,161,204,139,148,ok
 white (3).jpg,White,230,191,176,205,140,141,ok
-white (30).jpg,White,181,149,136,164,138,139,ok
+white (30).jpg,White,226,193,173,205,137,142,ok
 white (31).jpg,White,244,217,211,226,136,134,ok
 white (32).jpg,White,229,214,207,221,132,133,ok
 white (33).jpg,White,228,191,168,204,138,144,ok
@@ -320,7 +320,7 @@ white (47).jpg,White,206,160,145,178,143,142,ok
 white (48).jpg,White,244,208,186,219,137,144,ok
 white (49).jpg,White,222,188,161,200,136,146,ok
 white (5).jpg,White,242,199,177,213,140,145,ok
-white (50).jpg,White,225,191,192,205,140,132,ok
+white (50).jpg,White,231,189,159,203,139,149,ok
 white (51).jpg,White,232,181,158,198,143,147,ok
 white (52).jpg,White,244,203,180,216,139,145,ok
 white (53).jpg,White,223,202,197,212,135,133,ok
@@ -331,7 +331,7 @@ white (57).jpg,White,226,195,152,205,133,154,ok
 white (58).jpg,White,242,204,188,217,139,141,ok
 white (59).jpg,White,232,180,153,197,143,149,ok
 white (6).jpg,White,231,182,150,198,141,151,ok
-white (60).jpg,White,197,176,164,187,134,137,ok
+white (60).jpg,White,223,206,197,214,132,135,ok
 white (61).jpg,White,239,200,184,213,139,141,ok
 white (62).jpg,White,241,201,182,214,139,143,ok
 white (63).jpg,White,243,195,174,210,142,145,ok
@@ -357,12 +357,12 @@ white (80).jpg,White,215,198,190,207,133,134,ok
 white (81).jpg,White,216,177,159,192,140,143,ok
 white (82).jpg,White,241,214,183,222,133,147,ok
 white (83).jpg,White,220,189,182,202,138,136,ok
-white (84).jpg,White,184,153,148,168,139,135,ok
+white (84).jpg,White,229,198,180,209,136,141,ok
 white (85).jpg,White,230,180,160,197,143,145,ok
 white (86).jpg,White,229,187,168,202,140,143,ok
 white (87).jpg,White,235,195,171,208,139,145,ok
-white (88).jpg,White,214,195,191,205,134,132,ok
-white (89).jpg,White,212,196,191,205,133,133,ok
+white (88).jpg,White,231,179,150,196,143,150,ok
+white (89).jpg,White,224,188,153,200,136,150,ok
 white (9).jpg,White,225,189,176,203,139,139,ok
 white (90).jpg,White,224,204,181,212,131,142,ok
 white (91).jpg,White,213,186,167,197,135,141,ok

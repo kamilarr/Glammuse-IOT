@@ -6,8 +6,8 @@ import io
 import os
 import sys
 
-INPUT = "Convert/hex_black.csv"
-OUTPUT = "Convert/hex_to_lab_output_black.csv"
+INPUT = "Convert/hex_white.csv"
+OUTPUT = "Convert/hex_to_lab_output_white.csv"
 
 # --- helper: robust hex to rgb ---
 def hex_to_rgb(hex_color):

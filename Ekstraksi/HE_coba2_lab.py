@@ -6,49 +6,37 @@ from sklearn.cluster import KMeans
 import mediapipe as mp
 import traceback
 
-# -----------------------
 # CONFIG
-# -----------------------
-BASE_FOLDER = "Dataset"            # folder berisi subfolder Black,Brown,White
+BASE_FOLDER = "Dataset"
 OUTPUT_CSV = "Ekstraksi/HE_skin_dataset_results.csv"
-DEBUG_SAVE = True                  # kalau True simpan gambar debug ke folder debug_output/
+DEBUG_SAVE = True
 DEBUG_FOLDER = "debug_output"
-MIN_BBOX_SIZE = 30                 # minimal width/height bbox untuk GrabCut
-GRABCUT_ITER = 5                   # iterasi GrabCut
-PAD_RATIO = 0.20                   # padding relatif terhadap height bbox (20%)
-KMEANS_K = 2                       # jumlah cluster KMeans
-KMEANS_N_INIT = 10                 # n_init untuk KMeans
-MIN_SKIN_PIXELS = 500              # minimal pixel valid skin untuk dipakai KMeans (tuning)
+MIN_BBOX_SIZE = 30
+GRABCUT_ITER = 5
+PAD_RATIO = 0.20
+KMEANS_K = 2
+KMEANS_N_INIT = 10
+MIN_SKIN_PIXELS = 500
 
-# -----------------------
 # MediaPipe detector (buat sekali)
-# -----------------------
 mp_face = mp.solutions.face_detection
 face_detector = mp_face.FaceDetection(model_selection=0, min_detection_confidence=0.6)
 
-# -----------------------
 # MediaPipe Face Mesh (landmarks)
-# -----------------------
 mp_mesh = mp.solutions.face_mesh
 face_mesh = mp_mesh.FaceMesh(static_image_mode=True,
                             max_num_faces=1,
                             refine_landmarks=True,
                             min_detection_confidence=0.5)
 
-# -----------------------
 # Haarcascade Fallback Detector
-# -----------------------
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
 
-# -----------------------
 # Util: buat folder debug
-# -----------------------
 if DEBUG_SAVE and not os.path.exists(DEBUG_FOLDER):
     os.makedirs(DEBUG_FOLDER)
 
-# -----------------------
 # Landmark index groups (MediaPipe 468 / 478 refined)
-# -----------------------
 FACE_OVAL = [10,338,297,332,284,251,389,356,454,
              323,361,288,397,365,379,378,400,
              377,152,148,176,149,150,136,172,
@@ -60,9 +48,7 @@ LEFT_BROW = [70,63,105,66,107]
 RIGHT_BROW = [336,296,334,293,300]
 OUTER_LIPS = [61,146,91,181,84,17,314,405,321,375,291,308]
 
-# -----------------------
 # Helpers: convert landmarks to pixel points
-# -----------------------
 def landmarks_to_points(landmarks, idxs, img_w, img_h):
     pts = []
     for i in idxs:
@@ -72,9 +58,7 @@ def landmarks_to_points(landmarks, idxs, img_w, img_h):
         pts.append([x, y])
     return np.array(pts, np.int32)
 
-# -----------------------
-# 1) Deteksi wajah pake MediaPipe + padding
-# -----------------------
+# Deteksi wajah pake MediaPipe + padding
 def detect_face_mediapipe(img):
     img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     results = face_detector.process(img_rgb)
@@ -102,14 +86,8 @@ def detect_face_mediapipe(img):
 
     return (x, y, w, h)
 
-# -----------------------
 # Fallback: Haarcascade + padding
-# -----------------------
 def detect_face_fallback(img):
-    """
-    Coba MediaPipe dulu.
-    Jika gagal → fallback Haarcascade.
-    """
     mp_box = detect_face_mediapipe(img)
     if mp_box is not None:
         return mp_box
@@ -141,9 +119,7 @@ def detect_face_fallback(img):
 
     return (x, y, w, h)
 
-# -----------------------
-# 2) GrabCut dengan fallback
-# -----------------------
+# GrabCut dengan fallback
 def apply_grabcut_with_fallback(img, face_box):
     x, y, w, h = face_box
 
@@ -187,24 +163,19 @@ def apply_grabcut_with_fallback(img, face_box):
             img_fg = img * full_mask[:, :, np.newaxis]
             return img_fg, full_mask.astype(np.uint8)
 
-# -----------------------
-# 3) Histogram Equalization (HE) in YCrCb
-# -----------------------
+# Histogram Equalization (HE) in YCrCb
 def apply_he_ycrcb(img):
     # Histogram Equalization (HE) pada channel Y (brightness)
     ycrcb = cv2.cvtColor(img, cv2.COLOR_BGR2YCrCb)
     y, cr, cb = cv2.split(ycrcb)
 
-    # HISTOGRAM EQUALIZATION biasa, bukan CLAHE
     y_he = cv2.equalizeHist(y)
 
     merged = cv2.merge([y_he, cr, cb])
     img_he = cv2.cvtColor(merged, cv2.COLOR_YCrCb2BGR)
     return img_he, merged
 
-# -----------------------
-# 4) Initial skin mask (HSV + YCrCb) - improved ranges + cleaning
-# -----------------------
+# Initial skin mask (HSV + YCrCb) - improved ranges + cleaning
 def initial_skin_mask(face_roi):
     if face_roi is None or face_roi.size == 0:
         return np.zeros((0, 0), dtype=np.uint8)
@@ -224,9 +195,7 @@ def initial_skin_mask(face_roi):
     _, mask_bin = cv2.threshold(mask, 10, 255, cv2.THRESH_BINARY)
     return mask_bin
 
-# -----------------------
-# 5) Dominant color
-# -----------------------
+# Dominant color
 def dominant_color(img, mask, k=KMEANS_K):
     pixels = img[mask > 0]
     if len(pixels) == 0:
@@ -240,9 +209,7 @@ def dominant_color(img, mask, k=KMEANS_K):
     dominant = kmeans.cluster_centers_[np.argmax(counts)]
     return dominant.astype(int)
 
-# -----------------------
-# 6) Build masks from FaceMesh (full-image masks)
-# -----------------------
+# Build masks from FaceMesh (full-image masks)
 def build_masks_from_mesh(img, face_box):
     ih, iw = img.shape[:2]
     # run face_mesh on RGB image
@@ -305,9 +272,7 @@ def build_masks_from_mesh(img, face_box):
 
     return face_mask_full, feature_mask_full, mesh_draw
 
-# -----------------------
-# 7) Process folder to CSV (LAB added)
-# -----------------------
+# Process folder to CSV (LAB added)
 def process_folder_to_csv(base_folder=BASE_FOLDER, output_csv=OUTPUT_CSV):
     rows = []
     total = 0
@@ -434,9 +399,7 @@ def process_folder_to_csv(base_folder=BASE_FOLDER, output_csv=OUTPUT_CSV):
     df.to_csv(output_csv, index=False)
     print(f"\nDONE. Total: {total}, Failed: {failed}. CSV: {output_csv}")
 
-# -----------------------
 # debug save function (updated)
-# -----------------------
 def save_debug_visuals(original_path, orig_img, face_box, grab_mask255, combined_mask, dom_rgb, label, fname, mesh_draw=None, refined_face=None):
     try:
         base = os.path.join(DEBUG_FOLDER, label)
@@ -499,8 +462,6 @@ def save_debug_visuals(original_path, orig_img, face_box, grab_mask255, combined
     except Exception as e:
         print("Failed to save debug visuals:", e)
 
-# -----------------------
 # MAIN
-# -----------------------
 if __name__ == "__main__":
     process_folder_to_csv(BASE_FOLDER, OUTPUT_CSV)

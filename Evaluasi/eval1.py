@@ -53,6 +53,6 @@ evaluate_file(
 )
 
 evaluate_file(
-    extract_csv_path="Ekstraksi/CLAHE_skin_dataset_results.csv",
-    output_path="Evaluasi/evaluation_deltaE_CLAHE.csv"
+    extract_csv_path="tanpafacemesh/CLAHE_skin_dataset_results_new.csv",
+    output_path="tanpafacemesh/evaluation_deltaE_CLAHE_new.csv"
 )

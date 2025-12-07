@@ -1,7 +1,7 @@
 import pandas as pd
 
 # 1. LOAD DATA
-df = pd.read_csv("Matching/Skinshade_Matching_Result2.csv")
+df = pd.read_csv("Matching/Skinshade_Matching_Result_HE.csv")
 
 # Pastikan kolom DeltaE tipe float
 delta_cols = ["recommend_1_deltaE", "recommend_2_deltaE", "recommend_3_deltaE"]

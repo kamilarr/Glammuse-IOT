@@ -48,11 +48,11 @@ def evaluate_file(extract_csv_path, output_path):
 
 # Evaluasi 2 File Sekaligus
 evaluate_file(
-    extract_csv_path="Ekstraksi/HE_skin_dataset_results.csv",
+    extract_csv_path="Ekstraksi/HE_skin_dataset_results_full.csv",
     output_path="Evaluasi/evaluation_deltaE_HE.csv"
 )
 
 evaluate_file(
-    extract_csv_path="tanpafacemesh/CLAHE_skin_dataset_results_new.csv",
-    output_path="tanpafacemesh/evaluation_deltaE_CLAHE_new.csv"
+    extract_csv_path="Ekstraksi/CLAHE_skin_dataset_results_new_ori.csv",
+    output_path="Evaluasi/evaluation_deltaE_CLAHE_new_ori.csv"
 )
